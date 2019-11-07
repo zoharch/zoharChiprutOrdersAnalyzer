@@ -28,10 +28,6 @@ class OrdersAnalyzer {
         for(i in 0..6) if (counters[i]>0) result[DayOfWeek.of(i+1)]=counters[i]
         return result
     }
-    fun zohar(orders: List<Order>) {
-       val output =  orders.groupBy { it.creationDate }
-        println(output)
-    }
 }
 
 class Mock {
@@ -86,9 +82,6 @@ class Mock {
             val orders: List<Order> = mapper.readValue(inputExample)
             val totalDailySales = OrdersAnalyzer().totalDailySales(orders)
             println("totalDailySales: $totalDailySales")
-            //---------
-            OrdersAnalyzer().zohar(orders)
-            //---------
         } catch (e: Exception) {
             println(e)
         }
