@@ -18,7 +18,7 @@ class OrdersAnalyzer {
                          val quantity: Int,
                          val unitPrice: BigDecimal)
 
-    fun totalDailySales(orders: List<Order>): Map<DayOfWeek, Int> {
+    fun totalDailySales1(orders: List<Order>): Map<DayOfWeek, Int> {
         val counters = IntArray(7)
         for (order in orders) {
             val day = order.creationDate.dayOfWeek.value-1
@@ -27,6 +27,17 @@ class OrdersAnalyzer {
         val result = mutableMapOf<DayOfWeek,Int>()
         for(i in 0..6) if (counters[i]>0) result[DayOfWeek.of(i+1)]=counters[i]
         return result
+    }
+    
+    fun totalDailySales(orders: List<Order>): Map<DayOfWeek, Int> {
+      return orders.map {
+                order -> order.creationDate.dayOfWeek to
+                order.orderLines.sumBy {
+                        orderLine ->  orderLine.quantity
+                } }
+                .groupBy {it.first }
+                .map { entry ->  entry.key to  entry.value.sumBy { it.second } }
+                .toMap()
     }
 }
 
@@ -80,8 +91,8 @@ class Mock {
             .findAndRegisterModules()
         try {
             val orders: List<Order> = mapper.readValue(inputExample)
-            val totalDailySales = OrdersAnalyzer().totalDailySales(orders)
-            println("totalDailySales: $totalDailySales")
+            println("totalDailySales: ${OrdersAnalyzer().totalDailySales(orders)}")
+            println("totalDailySales1: ${OrdersAnalyzer().totalDailySales1(orders)}")
         } catch (e: Exception) {
             println(e)
         }
