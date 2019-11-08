@@ -37,6 +37,7 @@ class OrdersAnalyzer {
                 } }
                 .groupBy {it.first }
                 .map { entry ->  entry.key to  entry.value.sumBy { it.second } }
+                .filter { it.second != 0 }
                 .toMap()
     }
 }
@@ -82,6 +83,12 @@ class Mock {
             "orderLines": [
                 {"productId": 9872, "name": "Pencil", "quantity": 4, "unitPrice": 3.12},
                 {"productId": 4098, "name": "Marker", "quantity": 5, "unitPrice": 4.50}
+            ]
+        },
+        {
+            "orderId": 691,
+            "creationDate": "2017-03-21T12:15:02",
+            "orderLines": [
             ]
         }
     ]
